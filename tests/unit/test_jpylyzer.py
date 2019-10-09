@@ -3,8 +3,10 @@ import sys
 import pytest
 
 from jpylyzer.jpylyzer import __version__, checkNullArgs, checkNoInput, \
-                              printHelpAndExit, EXISTING_FILES, getFiles
+                              getFiles, printHelpAndExit, EXISTING_FILES, \
+                              checkOneFile
 import jpylyzer.config as config
+import jpylyzer.etpatch as ET
 
 def test_version():
     assert __version__
@@ -53,3 +55,8 @@ def test_get_files():
     if sys.version_info > (3, 0):
         EXISTING_FILES.clear()
         assert not EXISTING_FILES
+
+def test_aware_valid():
+    rootOut = checkOneFile('/home/johan/jpylyzer-test-files/aware.jp2', 'jp2')
+    #assert isinstance(rootOut, ET.Element)
+    assert rootOut.findElementText('isValid') == 'True'
